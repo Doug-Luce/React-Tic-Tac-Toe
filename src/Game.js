@@ -15,13 +15,15 @@ import './App.css';
 // The order of the components will be from the smallest out, so Square > Board > Game
 // Game will contain the state.
 
+// This line is a feature. I intend to roll it back as a test
+
 const Square = (props) => {
   return (
     <div onClick={props.onClick} className="square">{props.value}</div>
   );
 }
 
-class Board extends React.Component {
+class Board extends Component {
   constructor() {
     super();
     this.handleClick = this.handleClick.bind(this);
@@ -68,7 +70,7 @@ class Board extends React.Component {
   }
 }
 
-class Game extends React.Component {
+class Game extends Component {
   constructor() {
     super();
     this.state = {gameBoard: [0,1,2,3,4,5,6,7,8]};
