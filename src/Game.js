@@ -36,7 +36,7 @@ class Board extends Component {
         value={this.props.gameBoard[i]}
         // I had to use an anonymous button here to make the handleClick not execute.
         // HUZZAH!!!
-        onClick={() => props.handleClick(this.props.gameBoard[i])}
+        onClick={() => this.props.onClick(i)}
         />
     );
   }
@@ -72,12 +72,15 @@ class Game extends Component {
   }
 
   handleClick(i) {
-    this.setState({gameBoard: [i] = 'x'});
+    let gameBoardArr = this.state.gameBoard;
+    gameBoardArr[i] = 'x';
+    this.setState({gameBoard: gameBoardArr});
+    // This is just adding a new array only containing X, but needs to add X only to position clicked.
   }
 
   render() {
     return (
-      <Board gameBoard={this.state.gameBoard} onClick={this.handleClick}/>
+      <Board gameBoard={this.state.gameBoard} onClick={i => this.handleClick(i)}/>
     );
   }
 }
