@@ -24,16 +24,10 @@ const Square = (props) => {
 }
 
 class Board extends Component {
-  constructor() {
-    super();
-    this.handleClick = this.handleClick.bind(this);
+  constructor(props) {
+    super(props);
     this.makeSquare = this.makeSquare.bind(this);
     }
-  // TODO Click can't set state! This will need to be moved into Game
-  handleClick(i) {
-    console.log(this.props.gameBoard[i]);
-    this.setState({gameBoard: [i] = 'x'})
-  }
 
   //TODO add a handle click function
   makeSquare(i) {
@@ -42,7 +36,7 @@ class Board extends Component {
         value={this.props.gameBoard[i]}
         // I had to use an anonymous button here to make the handleClick not execute.
         // HUZZAH!!!
-        onClick={() => this.handleClick(this.props.gameBoard[i])}
+        onClick={() => props.handleClick(this.props.gameBoard[i])}
         />
     );
   }
@@ -77,9 +71,13 @@ class Game extends Component {
                   //Array(9).fill(4)
   }
 
+  handleClick(i) {
+    this.setState({gameBoard: [i] = 'x'});
+  }
+
   render() {
     return (
-      <Board gameBoard={this.state.gameBoard}/>
+      <Board gameBoard={this.state.gameBoard} onClick={this.handleClick}/>
     );
   }
 }
