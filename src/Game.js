@@ -34,8 +34,6 @@ class Board extends Component {
     return (
       <Square
         value={this.props.gameBoard[i]}
-        // I had to use an anonymous button here to make the handleClick not execute.
-        // HUZZAH!!!
         onClick={() => this.props.onClick(i)}
         />
     );
@@ -67,13 +65,23 @@ class Board extends Component {
 class Game extends Component {
   constructor() {
     super();
-    this.state = {gameBoard: [0,1,2,3,4,5,6,7,8]};
+    this.state = {
+      gameBoard: Array(9).fill(null),
+      playerTurn: false
+    };
                   //Array(9).fill(4)
   }
 
   handleClick(i) {
     let gameBoardArr = this.state.gameBoard;
-    gameBoardArr[i] = 'x';
+
+    if (gameBoardArr[i] !== null) {
+      if (gameBoardArr[i] === 'x') {
+        gameBoardArr[i] = 'o';
+      } else if (gameBoardArr[i] === 'o') {
+        gameBoardArr[i] = 'x';
+      }
+    }
     this.setState({gameBoard: gameBoardArr});
     // This is just adding a new array only containing X, but needs to add X only to position clicked.
   }
