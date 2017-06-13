@@ -67,21 +67,50 @@ class Game extends Component {
     super();
     this.state = {
       gameBoard: Array(9).fill(null),
-      playerTurn: false
+      playerTurn: true,
+      noughts: false //noughts are O's
     };
                   //Array(9).fill(4)
   }
 
+  componentDidMount() {
+    //this.setState({playerTurn: true});
+    //this.setState({noughts: false});
+  }
+
   handleClick(i) {
     let gameBoardArr = this.state.gameBoard;
-
-    if (gameBoardArr[i] !== null) {
-      if (gameBoardArr[i] === 'x') {
-        gameBoardArr[i] = 'o';
-      } else if (gameBoardArr[i] === 'o') {
-        gameBoardArr[i] = 'x';
+    // First turn logic for the player. This will check if the board is null, and input the selected nought or cross
+    if (gameBoardArr[i] === null) {
+      console.log('gameBoardArr[' + gameBoardArr[i] + ']');
+      console.log('I ran');
+      if (this.state.playerTurn) {
+       if (this.state.noughts) {
+         gameBoardArr[i] = 'O';
+         this.setState({noughts: true});
+       } else if (!this.state.noughts) {
+         gameBoardArr[i] = 'X';
+         this.setState({noughts: true});
+       };        
+       this.setState({playerTurn: false});
       }
     }
+
+    if (gameBoardArr[i] === null) {
+      console.log('I ran');
+      if (!this.state.playerTurn) {
+        if (!this.state.noughts) {
+          gameBoardArr[i] = 'X';
+          this.setState({playerTurn: true});
+          this.setState({noughts: false});
+        } else if (this.state.noughts) {
+          gameBoardArr[i] = 'O';
+          this.setState({playerTurn: true});
+          this.setState({noughts: false});
+        }        
+      }
+    }
+
     this.setState({gameBoard: gameBoardArr});
     // This is just adding a new array only containing X, but needs to add X only to position clicked.
   }
