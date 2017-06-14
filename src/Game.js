@@ -83,7 +83,6 @@ class Game extends Component {
     // First turn logic for the player. This will check if the board is null, and input the selected nought or cross
     if (gameBoardArr[i] === null) {
       console.log('gameBoardArr[' + gameBoardArr[i] + ']');
-      console.log('I ran');
       if (this.state.playerTurn) {
        if (this.state.noughts) {
          gameBoardArr[i] = 'O';
@@ -97,7 +96,6 @@ class Game extends Component {
     }
 
     if (gameBoardArr[i] === null) {
-      console.log('I ran');
       if (!this.state.playerTurn) {
         if (!this.state.noughts) {
           gameBoardArr[i] = 'X';
@@ -110,9 +108,33 @@ class Game extends Component {
         }        
       }
     }
-
+    console.log(gameBoardArr);
     this.setState({gameBoard: gameBoardArr});
-    // This is just adding a new array only containing X, but needs to add X only to position clicked.
+  }
+
+  checkWinner() {
+    this.winningStates = {
+      top:     ['X','X','X',
+                'E','E','E',
+                'E','E','E'],
+      middle:  ['E','E','E',
+                'X','X','X',
+                'E','E','E'],
+      bottom:  ['E','E','E',
+                'E','E','E',
+                'X','X','X'],
+      vLeft:   ['X','E','E',
+                'X','E','E',
+                'X','E','E'],
+      vMiddle: ['E','X','E',
+                'E','X','E',
+                'E','X','E'],
+      vRight:  ['E','E','X',
+                'E','E','X',
+                'E','E','X']
+
+
+    }
   }
 
   render() {
