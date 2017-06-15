@@ -110,31 +110,40 @@ class Game extends Component {
     }
     console.log(gameBoardArr);
     this.setState({gameBoard: gameBoardArr});
+    this.checkWinner();
   }
 
   checkWinner() {
-    this.winningStates = {
-      top:     ['X','X','X',
-                'E','E','E',
-                'E','E','E'],
-      middle:  ['E','E','E',
-                'X','X','X',
-                'E','E','E'],
-      bottom:  ['E','E','E',
-                'E','E','E',
-                'X','X','X'],
-      vLeft:   ['X','E','E',
-                'X','E','E',
-                'X','E','E'],
-      vMiddle: ['E','X','E',
-                'E','X','E',
-                'E','X','E'],
-      vRight:  ['E','E','X',
-                'E','E','X',
-                'E','E','X']
+    let top = this.state.gameBoard.slice(0, 3);
+    let middle = this.state.gameBoard.slice(3, 6);
+    let bottom = this.state.gameBoard.slice(6, 9);
 
+    let vLeft  = [];
+    vLeft.push(this.state.gameBoard[0]);
+    vLeft.push(this.state.gameBoard[3]);
+    vLeft.push(this.state.gameBoard[6]);
 
-    }
+    let vMiddle = [];
+    vMiddle.push(this.state.gameBoard[1]);
+    vMiddle.push(this.state.gameBoard[4]);
+    vMiddle.push(this.state.gameBoard[7]);
+
+    let vRight = [];
+    vRight.push(this.state.gameBoard[2]);
+    vRight.push(this.state.gameBoard[5]);
+    vRight.push(this.state.gameBoard[8]);
+
+    let leftCross = [];
+    leftCross.push(this.state.gameBoard[0]);
+    leftCross.push(this.state.gameBoard[4]);
+    leftCross.push(this.state.gameBoard[8]);
+
+    let rightCross = [];
+    rightCross.push(this.state.gameBoard[2]);
+    rightCross.push(this.state.gameBoard[4]);
+    rightCross.push(this.state.gameBoard[6]);
+    
+    console.log(leftCross);
   }
 
   render() {
