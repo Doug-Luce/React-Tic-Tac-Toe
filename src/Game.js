@@ -82,7 +82,6 @@ class Game extends Component {
     let gameBoardArr = this.state.gameBoard;
     // First turn logic for the player. This will check if the board is null, and input the selected nought or cross
     if (gameBoardArr[i] === null) {
-      console.log('gameBoardArr[' + gameBoardArr[i] + ']');
       if (this.state.playerTurn) {
        if (this.state.noughts) {
          gameBoardArr[i] = 'O';
@@ -108,34 +107,36 @@ class Game extends Component {
         }        
       }
     }
-    console.log(gameBoardArr);
     this.setState({gameBoard: gameBoardArr});
     this.checkWinner();
   }
 
   checkWinner() {
+    let vLeft  = [];
+    let vMiddle = [];
+    let vRight = [];
+    let leftCross = [];
+    let rightCross = [];
     let top = this.state.gameBoard.slice(0, 3);
     let middle = this.state.gameBoard.slice(3, 6);
     let bottom = this.state.gameBoard.slice(6, 9);
-
-    let vLeft  = [];
-    vLeft.push(this.state.gameBoard[0], this.state.gameBoard[3], this.state.gameBoard[6]);
-
-    let vMiddle = [];
+    vLeft.push(this.state.gameBoard[0], this.state.gameBoard[3], this.state.gameBoard[6]);   
     vMiddle.push(this.state.gameBoard[1], this.state.gameBoard[4], this.state.gameBoard[7]);
-
-    let vRight = [];
     vRight.push(this.state.gameBoard[2], this.state.gameBoard[5], this.state.gameBoard[8]);
-
-    let leftCross = [];
     leftCross.push(this.state.gameBoard[0], this.state.gameBoard[4], this.state.gameBoard[8]);
-
-    let rightCross = [];
-    rightCross.push(this.state.gameBoard[2]);
-    rightCross.push(this.state.gameBoard[4]);
-    rightCross.push(this.state.gameBoard[6]);
+    rightCross.push(this.state.gameBoard[2], this.state.gameBoard[4], this.state.gameBoard[6]);
+    let winStates = [];
+    winStates.push([vLeft, vMiddle, vRight, leftCross, rightCross, top, middle, bottom]);
     
-    console.log(vLeft);
+    for (var i = 0; i < winStates.length; i++) {
+      for (var y = 0; y < winStates[i].length; y++) {
+        console.log(winStates[i][y]);
+      }
+      console.log('---------------------');
+      
+    }
+
+
   }
 
   render() {
@@ -144,5 +145,6 @@ class Game extends Component {
     );
   }
 }
+
 
 export default Game;
