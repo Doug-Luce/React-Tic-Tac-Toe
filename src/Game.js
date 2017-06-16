@@ -114,6 +114,25 @@ class Game extends Component {
     }
   }
 
+  aiMove(i) {
+    let gameBoardArr = this.state.gameBoard;
+    if (gameBoardArr[i] === null) {
+        if (!this.state.playerTurn) {
+          if (!this.state.noughts) {
+            gameBoardArr[i] = 'X';
+            this.setState({playerTurn: true});
+            this.setState({noughts: false});
+          } else if (this.state.noughts) {
+            gameBoardArr[i] = 'O';
+            this.setState({playerTurn: true});
+            this.setState({noughts: false});
+          }        
+        }
+      }
+    this.setState({gameBoard: gameBoardArr});
+    this.checkWinner();
+  }
+
   checkWinner() {
     let vLeft  = [];
     let vMiddle = [];
@@ -134,9 +153,11 @@ class Game extends Component {
     for (var i = 0; i < winStates.length; i++) {
       for (var y = 0; y < winStates[i].length; y++) {
         console.log(winStates[i][y]);
+
         if(winStates[i][y].equals(['X','X','X'])) {
           console.log('X WINS!');
           this.state.gameWon = true;
+
         } else if (winStates[i][y].equals(['O','O','O'])){
           console.log('O WINS!');
           this.state.gameWon = true;
@@ -144,7 +165,6 @@ class Game extends Component {
       }
       console.log('---------------------');
     }
-
 
   }
 
@@ -154,7 +174,6 @@ class Game extends Component {
     );
   }
 }
-
 
 export default Game;
 
