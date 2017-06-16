@@ -9,13 +9,10 @@ import './App.css';
 // Board resets after the game ends to play again
 // User can't clear move after being placed
 // Computer can't place X or O in an existing space
-
 // class Square will render squares, and set there event click event and value;
 // 3 components will be made, one to make a square, one to make the game board, and one to contain the game
 // The order of the components will be from the smallest out, so Square > Board > Game
 // Game will contain the state.
-
-// This line is a feature. I intend to roll it back as a test
 
 const Square = (props) => {
   return (
@@ -71,12 +68,6 @@ class Game extends Component {
       noughts: false, //noughts are O's
       gameWon: false
     };
-                  //Array(9).fill(4)
-  }
-
-  componentDidMount() {
-    //this.setState({playerTurn: true});
-    //this.setState({noughts: false});
   }
 
   handleClick(i) {
@@ -112,6 +103,10 @@ class Game extends Component {
       this.setState({gameBoard: gameBoardArr});
       this.checkWinner();
     }
+  }
+  aiDecideMove() {
+    let gameBoardArr = this.state.gameBoard;
+    console.log(gameBoardArr);
   }
 
   aiMove(i) {
