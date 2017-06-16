@@ -68,7 +68,8 @@ class Game extends Component {
     this.state = {
       gameBoard: Array(9).fill(null),
       playerTurn: true,
-      noughts: false //noughts are O's
+      noughts: false, //noughts are O's
+      gameWon: false
     };
                   //Array(9).fill(4)
   }
@@ -79,36 +80,38 @@ class Game extends Component {
   }
 
   handleClick(i) {
-    let gameBoardArr = this.state.gameBoard;
-    // First turn logic for the player. This will check if the board is null, and input the selected nought or cross
-    if (gameBoardArr[i] === null) {
-      if (this.state.playerTurn) {
-       if (this.state.noughts) {
-         gameBoardArr[i] = 'O';
-         this.setState({noughts: true});
-       } else if (!this.state.noughts) {
-         gameBoardArr[i] = 'X';
-         this.setState({noughts: true});
-       };        
-       this.setState({playerTurn: false});
+    if (!this.state.gameWon) {
+      let gameBoardArr = this.state.gameBoard;
+      // First turn logic for the player. This will check if the board is null, and input the selected nought or cross
+      if (gameBoardArr[i] === null) {
+        if (this.state.playerTurn) {
+         if (this.state.noughts) {
+           gameBoardArr[i] = 'O';
+           this.setState({noughts: true});
+         } else if (!this.state.noughts) {
+           gameBoardArr[i] = 'X';
+           this.setState({noughts: true});
+         };        
+         this.setState({playerTurn: false});
+        }
       }
-    }
 
-    if (gameBoardArr[i] === null) {
-      if (!this.state.playerTurn) {
-        if (!this.state.noughts) {
-          gameBoardArr[i] = 'X';
-          this.setState({playerTurn: true});
-          this.setState({noughts: false});
-        } else if (this.state.noughts) {
-          gameBoardArr[i] = 'O';
-          this.setState({playerTurn: true});
-          this.setState({noughts: false});
-        }        
+      if (gameBoardArr[i] === null) {
+        if (!this.state.playerTurn) {
+          if (!this.state.noughts) {
+            gameBoardArr[i] = 'X';
+            this.setState({playerTurn: true});
+            this.setState({noughts: false});
+          } else if (this.state.noughts) {
+            gameBoardArr[i] = 'O';
+            this.setState({playerTurn: true});
+            this.setState({noughts: false});
+          }        
+        }
       }
+      this.setState({gameBoard: gameBoardArr});
+      this.checkWinner();
     }
-    this.setState({gameBoard: gameBoardArr});
-    this.checkWinner();
   }
 
   checkWinner() {
@@ -133,8 +136,10 @@ class Game extends Component {
         console.log(winStates[i][y]);
         if(winStates[i][y].equals(['X','X','X'])) {
           console.log('X WINS!');
+          this.state.gameWon = true;
         } else if (winStates[i][y].equals(['O','O','O'])){
           console.log('O WINS!');
+          this.state.gameWon = true;
         }
       }
       console.log('---------------------');
