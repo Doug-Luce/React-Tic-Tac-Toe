@@ -102,11 +102,27 @@ class Game extends Component {
       }
       this.setState({gameBoard: gameBoardArr});
       this.checkWinner();
+      //the below function is for testing while building the AI decision
+      this.aiDecideMove();
     }
   }
   aiDecideMove() {
     let gameBoardArr = this.state.gameBoard;
-    console.log(gameBoardArr);
+    let possibleMoves = [];
+    let search = gameBoardArr.indexOf(null);
+    while (search != -1) {
+      possibleMoves.push(search);
+      search = gameBoardArr.indexOf(null, search + 1);
+    }
+//    for (let i = 0; i < gameBoardArr.length; i++) {
+//      if (gameBoardArr[i] === null) {
+//        possibleMoves.push('open');
+//      } else if (gameBoardArr[i] !== null) {
+//        possibleMoves.push('closed');
+//      }
+//    }
+
+    console.log(possibleMoves);
   }
 
   aiMove(i) {
@@ -147,18 +163,17 @@ class Game extends Component {
     
     for (var i = 0; i < winStates.length; i++) {
       for (var y = 0; y < winStates[i].length; y++) {
-        console.log(winStates[i][y]);
+        //console.log(winStates[i][y]);
 
         if(winStates[i][y].equals(['X','X','X'])) {
-          console.log('X WINS!');
-          this.state.gameWon = true;
+          //console.log('X WINS!');
+          this.setState({gameWon: true});
 
         } else if (winStates[i][y].equals(['O','O','O'])){
-          console.log('O WINS!');
-          this.state.gameWon = true;
-        }
+          //console.log('O WINS!');
+          this.setState({gameWon: true});        }
       }
-      console.log('---------------------');
+      //console.log('---------------------');
     }
 
   }
@@ -171,7 +186,6 @@ class Game extends Component {
 }
 
 export default Game;
-
 // Warn if overriding existing method
 if(Array.prototype.equals)
     console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
