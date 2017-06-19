@@ -36,7 +36,6 @@ class Board extends Component {
     super(props);
     this.makeSquare = this.makeSquare.bind(this);
     }
-    
   makeSquare(i) {
     return (
       <Square
