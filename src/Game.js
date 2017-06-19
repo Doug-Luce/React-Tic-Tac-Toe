@@ -24,8 +24,6 @@ const Debug = (props) => {
   return (
     <div>
       <h3>this.state.playerTurn: {props.playerTurn.toString()}</h3>
-      <h3>this.state.aiMove: {props.aiMove.toString()}</h3>
-      <h3>this.state.noughts: {props.noughts.toString()}</h3>
       <h3>this.state.gameWon: {props.gameWon.toString()}</h3>
     </div>
     );
@@ -74,10 +72,14 @@ class Game extends Component {
     this.state = {
       gameBoard: Array(9).fill(null),
       playerTurn: true,
-      noughts: false, //noughts are O's
+      playerMarker: 'X', 
       gameWon: false,
-      aiMove: 0
+      playerFirst: false
     };
+  }
+
+  componentDidMount() {
+    this.aiDecideMove(); 
   }
 
   handleClick(i) {
@@ -86,67 +88,37 @@ class Game extends Component {
       // First turn logic for the player. This will check if the board is null, and input the selected nought or cross
       if (gameBoardArr[i] === null) {
         if (this.state.playerTurn) {
-         if (this.state.noughts) {
-           gameBoardArr[i] = 'O';
-           this.setState({noughts: true});
-         } else if (!this.state.noughts) {
-           gameBoardArr[i] = 'X';
-           this.setState({noughts: true});
-         };        
+           gameBoardArr[i] = this.state.playerMarker;
          this.setState({playerTurn: false});
+         this.setState({gameBoard: gameBoardArr});
         }
       }
-
-      this.setState({gameBoard: gameBoardArr});
       this.checkWinner();
       this.aiDecideMove();
-      this.aiMove(this.state.aiMove);
 
     }
     console.log('handleClick has ran');
   }
   aiDecideMove() {
-    let gameBoardArr = this.state.gameBoard;
     let possibleMoves = [];
-    let search = gameBoardArr.indexOf(null);
-    while (search != -1) {
+    let search = this.state.gameBoard.indexOf(null);
+    while (search !== -1) {
       possibleMoves.push(search);
-      search = gameBoardArr.indexOf(null, search + 1);
+      search = this.state.gameBoard.indexOf(null, search + 1);
     }
-    this.setState({aiMove: possibleMoves.randomElement()});
-    console.log(possibleMoves);
-    console.log(possibleMoves.randomElement());
-    console.log('aiDecideMove has ran');
+    console.log('Possible Moves are: ' + possibleMoves);
+    let randomMove = possibleMoves.randomElement();
+    this.aiMove(randomMove);
   }
 
   aiMove(i) {
-    console.log(this.state.playerTurn);
+    console.log('Computer chooses: ' + i);
     let gameBoardArr = this.state.gameBoard;
-    if (this.state.noughts) {
-      gameBoardArr[i] = 'X';
-    } else {
-      gameBoardArr[i] = 'O';
-    }
-    // if (gameBoardArr[i] === null) {
-    //     if (!this.state.playerTurn) {
-    //       if (!this.state.noughts) {
-    //         gameBoardArr[i] = 'X';
-    //         this.setState({playerTurn: true});
-    //         this.setState({noughts: false});
-    //       } 
-    //       if (this.state.noughts) {
-    //         gameBoardArr[i] = 'O';
-    //         this.setState({playerTurn: true});
-    //         this.setState({noughts: false});
-    //         console.log('AI has moved');
-    //       }        
-    //     }
-    //   }
+    gameBoardArr[i] = 'O';
+
     this.setState({playerTurn: true});
-    this.setState({noughts: false});
     this.setState({gameBoard: gameBoardArr});
     this.checkWinner();
-    console.log('aiMove has ran');
   }
 
   checkWinner() {
@@ -166,19 +138,14 @@ class Game extends Component {
     let winStates = [];
     winStates.push([vLeft, vMiddle, vRight, leftCross, rightCross, top, middle, bottom]);
     
+    // Check the winner
     for (var i = 0; i < winStates.length; i++) {
       for (var y = 0; y < winStates[i].length; y++) {
-        //console.log(winStates[i][y]);
-
         if(winStates[i][y].equals(['X','X','X'])) {
-          //console.log('X WINS!');
           this.setState({gameWon: true});
-
         } else if (winStates[i][y].equals(['O','O','O'])){
-          //console.log('O WINS!');
           this.setState({gameWon: true});        }
       }
-      //console.log('---------------------');
     }
 
   }
@@ -187,7 +154,7 @@ class Game extends Component {
     return (
       <div>
         <Board gameBoard={this.state.gameBoard} onClick={i => this.handleClick(i)}/>
-        <Debug playerTurn={this.state.playerTurn} noughts={this.state.noughts} aiMove={this.state.aiMove} gameWon={this.state.gameWon}/>
+        <Debug playerTurn={this.state.playerTurn} gameWon={this.state.gameWon}/>
       </div>
     );
   }
@@ -202,6 +169,7 @@ if(Array.prototype.randomElement) {
   console.warm("Overriding existing Array.prototype.randomElement. Possible causes: Nnew API defines the method, there's a framework conflict, or you've got double inclusions in your code.");
 }
 Array.prototype.randomElement = function() {
+  console.log('Random Element Output: ' + this[Math.floor(Math.random() * this.length)]);
   return this[Math.floor(Math.random() * this.length)];
 }
 
