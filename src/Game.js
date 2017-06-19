@@ -20,13 +20,23 @@ const Square = (props) => {
   );
 }
 
+const Debug = (props) => {
+  return (
+    <div>
+      <h3>this.state.playerTurn: {props.playerTurn.toString()}</h3>
+      <h3>this.state.aiMove: {props.aiMove.toString()}</h3>
+      <h3>this.state.noughts: {props.noughts.toString()}</h3>
+      <h3>this.state.gameWon: {props.gameWon.toString()}</h3>
+    </div>
+    );
+}
+
 class Board extends Component {
   constructor(props) {
     super(props);
     this.makeSquare = this.makeSquare.bind(this);
     }
-
-  //TODO add a handle click function
+    
   makeSquare(i) {
     return (
       <Square
@@ -67,7 +77,7 @@ class Game extends Component {
       playerTurn: true,
       noughts: false, //noughts are O's
       gameWon: false,
-      aiMove: null
+      aiMove: 0
     };
   }
 
@@ -88,24 +98,13 @@ class Game extends Component {
         }
       }
 
-      if (gameBoardArr[i] === null) {
-        if (!this.state.playerTurn) {
-          if (!this.state.noughts) {
-            gameBoardArr[i] = 'X';
-            this.setState({playerTurn: true});
-            this.setState({noughts: false});
-          } else if (this.state.noughts) {
-            gameBoardArr[i] = 'O';
-            this.setState({playerTurn: true});
-            this.setState({noughts: false});
-          }        
-        }
-      }
       this.setState({gameBoard: gameBoardArr});
       this.checkWinner();
-      //the below function is for testing while building the AI decision
       this.aiDecideMove();
+      this.aiMove(this.state.aiMove);
+
     }
+    console.log('handleClick has ran');
   }
   aiDecideMove() {
     let gameBoardArr = this.state.gameBoard;
@@ -118,10 +117,11 @@ class Game extends Component {
     this.setState({aiMove: possibleMoves.randomElement()});
     console.log(possibleMoves);
     console.log(possibleMoves.randomElement());
-
+    console.log('aiDecideMove has ran');
   }
 
   aiMove(i) {
+    console.log(this.state.playerTurn);
     let gameBoardArr = this.state.gameBoard;
     if (gameBoardArr[i] === null) {
         if (!this.state.playerTurn) {
@@ -129,15 +129,18 @@ class Game extends Component {
             gameBoardArr[i] = 'X';
             this.setState({playerTurn: true});
             this.setState({noughts: false});
-          } else if (this.state.noughts) {
+          } 
+          if (this.state.noughts) {
             gameBoardArr[i] = 'O';
             this.setState({playerTurn: true});
             this.setState({noughts: false});
+            console.log('AI has moved');
           }        
         }
       }
     this.setState({gameBoard: gameBoardArr});
     this.checkWinner();
+    console.log('aiMove has ran');
   }
 
   checkWinner() {
@@ -176,7 +179,10 @@ class Game extends Component {
 
   render() {
     return (
-      <Board gameBoard={this.state.gameBoard} onClick={i => this.handleClick(i)}/>
+      <div>
+        <Board gameBoard={this.state.gameBoard} onClick={i => this.handleClick(i)}/>
+        <Debug playerTurn={this.state.playerTurn} noughts={this.state.noughts} aiMove={this.state.aiMove} gameWon={this.state.gameWon}/>
+      </div>
     );
   }
 }
