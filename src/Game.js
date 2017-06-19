@@ -66,7 +66,8 @@ class Game extends Component {
       gameBoard: Array(9).fill(null),
       playerTurn: true,
       noughts: false, //noughts are O's
-      gameWon: false
+      gameWon: false,
+      aiMove: null
     };
   }
 
@@ -114,15 +115,10 @@ class Game extends Component {
       possibleMoves.push(search);
       search = gameBoardArr.indexOf(null, search + 1);
     }
-//    for (let i = 0; i < gameBoardArr.length; i++) {
-//      if (gameBoardArr[i] === null) {
-//        possibleMoves.push('open');
-//      } else if (gameBoardArr[i] !== null) {
-//        possibleMoves.push('closed');
-//      }
-//    }
-
+    this.setState({aiMove: possibleMoves.randomElement()});
     console.log(possibleMoves);
+    console.log(possibleMoves.randomElement());
+
   }
 
   aiMove(i) {
@@ -186,7 +182,19 @@ class Game extends Component {
 }
 
 export default Game;
+
+
+// Adding array functionality
+
+if(Array.prototype.randomElement) {
+  console.warm("Overriding existing Array.prototype.randomElement. Possible causes: Nnew API defines the method, there's a framework conflict, or you've got double inclusions in your code.");
+}
+Array.prototype.randomElement = function() {
+  return this[Math.floor(Math.random() * this.length)];
+}
+
 // Warn if overriding existing method
+// I copied this code from Stack Overflow to add to the array prototype to check if 2 arrays are equal. 
 if(Array.prototype.equals)
     console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
 // attach the .equals method to Array's prototype to call it on any array
