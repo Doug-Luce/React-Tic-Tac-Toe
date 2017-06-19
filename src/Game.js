@@ -122,21 +122,28 @@ class Game extends Component {
   aiMove(i) {
     console.log(this.state.playerTurn);
     let gameBoardArr = this.state.gameBoard;
-    if (gameBoardArr[i] === null) {
-        if (!this.state.playerTurn) {
-          if (!this.state.noughts) {
-            gameBoardArr[i] = 'X';
-            this.setState({playerTurn: true});
-            this.setState({noughts: false});
-          } 
-          if (this.state.noughts) {
-            gameBoardArr[i] = 'O';
-            this.setState({playerTurn: true});
-            this.setState({noughts: false});
-            console.log('AI has moved');
-          }        
-        }
-      }
+    if (this.state.noughts) {
+      gameBoardArr[i] = 'X';
+    } else {
+      gameBoardArr[i] = 'O';
+    }
+    // if (gameBoardArr[i] === null) {
+    //     if (!this.state.playerTurn) {
+    //       if (!this.state.noughts) {
+    //         gameBoardArr[i] = 'X';
+    //         this.setState({playerTurn: true});
+    //         this.setState({noughts: false});
+    //       } 
+    //       if (this.state.noughts) {
+    //         gameBoardArr[i] = 'O';
+    //         this.setState({playerTurn: true});
+    //         this.setState({noughts: false});
+    //         console.log('AI has moved');
+    //       }        
+    //     }
+    //   }
+    this.setState({playerTurn: true});
+    this.setState({noughts: false});
     this.setState({gameBoard: gameBoardArr});
     this.checkWinner();
     console.log('aiMove has ran');
