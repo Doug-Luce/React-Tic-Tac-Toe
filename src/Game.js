@@ -74,12 +74,16 @@ class Game extends Component {
       playerTurn: true,
       playerMarker: 'X', 
       gameWon: false,
-      playerFirst: false
+      aiMove: 0,
+      aiFirst: false
     };
   }
 
   componentDidMount() {
-    this.aiDecideMove(); 
+    if (this.state.aiFirst) {
+      this.aiDecideMove();
+      this.aiMove(this.state.aiMove);
+    }
   }
 
   handleClick(i) {
@@ -95,7 +99,7 @@ class Game extends Component {
       }
       this.checkWinner();
       this.aiDecideMove();
-
+      this.aiMove(this.state.aiMove);
     }
     console.log('handleClick has ran');
   }
@@ -107,15 +111,13 @@ class Game extends Component {
       search = this.state.gameBoard.indexOf(null, search + 1);
     }
     console.log('Possible Moves are: ' + possibleMoves);
-    let randomMove = possibleMoves.randomElement();
-    this.aiMove(randomMove);
+    this.state.aiMove = possibleMoves.randomElement();
   }
 
   aiMove(i) {
     console.log('Computer chooses: ' + i);
     let gameBoardArr = this.state.gameBoard;
     gameBoardArr[i] = 'O';
-
     this.setState({playerTurn: true});
     this.setState({gameBoard: gameBoardArr});
     this.checkWinner();
@@ -169,7 +171,6 @@ if(Array.prototype.randomElement) {
   console.warm("Overriding existing Array.prototype.randomElement. Possible causes: Nnew API defines the method, there's a framework conflict, or you've got double inclusions in your code.");
 }
 Array.prototype.randomElement = function() {
-  console.log('Random Element Output: ' + this[Math.floor(Math.random() * this.length)]);
   return this[Math.floor(Math.random() * this.length)];
 }
 
