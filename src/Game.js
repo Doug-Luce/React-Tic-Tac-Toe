@@ -172,19 +172,23 @@ class Game extends Component {
   selectX() {
     this.setState({playerMarker: 'X'});
     console.log('X selected');
-    this.coinFlip();
+    this.showDialog();
   }
 
   selectO() {
     this.setState({playerMarker: 'O'});
     console.log('O Selected');
-    this.coinFlip();
+    this.showDialog();
   }
 
-  coinFlip() {
+  showDialog() {
     let that = this;
     this.setState({showDialog: true});
     setTimeout(function(){ that.setState({showBoard: true, showDialog: false}); }, 3000);
+  }
+
+  coinFlip() {
+    return (Math.floor(Math.random() * 2) == 0); 
   }
 
   render() {
@@ -198,7 +202,12 @@ class Game extends Component {
         <button onClick={this.selectO.bind(this)}>O</button>
       </div>;
       if(this.state.showDialog) {
-        currentView = <div>Choosing who goes first...</div>
+        if(this.coinFlip()) {
+          currentView = <div>Player goes first.</div>;
+        } else {
+          currentView = <div>Computer goes first.</div>;
+        }
+        
       }
       return (
       <div>
