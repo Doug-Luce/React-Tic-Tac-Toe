@@ -83,14 +83,6 @@ class Game extends Component {
     this.gameWon = false;
   }
 
-  componentWillMount() {
-    let notLoaded = true;
-    while(notLoaded) {
-      prompt('Do you want to go first?');
-      notLoaded = false;
-    }
-  }
-
   componentDidMount() {
     if (this.state.aiFirst) {
       this.aiDecideMove();
@@ -181,7 +173,6 @@ class Game extends Component {
 }
 
 export default Game;
-
 
 // Adding array functionality
 
