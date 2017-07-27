@@ -67,6 +67,7 @@ class Board extends Component {
 }
 
 class Game extends Component {
+
   constructor() {
     super();
     this.state = {
@@ -77,6 +78,7 @@ class Game extends Component {
       aiMove: 0,
       aiFirst: false
     };
+    this.gameWon = false;
   }
 
   componentDidMount() {
@@ -87,7 +89,7 @@ class Game extends Component {
   }
 
   handleClick(i) {
-    if (!this.state.gameWon) {
+    if (!this.gameWon) {
       let gameBoardArr = this.state.gameBoard;
       // First turn logic for the player. This will check if the board is null, and input the selected nought or cross
       if (gameBoardArr[i] === null) {
@@ -99,7 +101,9 @@ class Game extends Component {
       }
       this.checkWinner();
       this.aiDecideMove();
-      this.aiMove(this.state.aiMove);
+      if(!this.gameWon) {
+        this.aiMove(this.state.aiMove);
+      };
     }
     console.log('handleClick has ran');
   }
@@ -144,9 +148,12 @@ class Game extends Component {
     for (var i = 0; i < winStates.length; i++) {
       for (var y = 0; y < winStates[i].length; y++) {
         if(winStates[i][y].equals(['X','X','X'])) {
-          this.setState({gameWon: true});
+          //this.setState({gameWon: true});
+          this.gameWon = true;
         } else if (winStates[i][y].equals(['O','O','O'])){
-          this.setState({gameWon: true});        }
+          //this.setState({gameWon: true});        }
+          this.gameWon = true;
+        }
       }
     }
 
