@@ -126,7 +126,12 @@ class Game extends Component {
   aiMove(i) {
     console.log('Computer chooses: ' + i);
     let gameBoardArr = this.state.gameBoard;
-    gameBoardArr[i] = 'O';
+    if(this.state.playerMarker === 'X') {
+      gameBoardArr[i] = 'O';
+    } else if(this.state.playerMarker === 'O') {
+      gameBoardArr[i] = 'X';
+    }
+    
     this.setState({playerTurn: true});
     this.setState({gameBoard: gameBoardArr});
     this.checkWinner();
@@ -163,9 +168,14 @@ class Game extends Component {
     }
   }
 
-  drawBoard() {
-    this.setState({showBoard: true});
-    console.log('Draw Board Executed');
+  selectX() {
+    this.setState({showBoard: true, playerMarker: 'X'});
+    console.log('X selected');
+  }
+
+  selectO() {
+    this.setState({showBoard: true, playerMarker: 'O'});
+    console.log('O Selected');
   }
 
   render() {
@@ -173,9 +183,10 @@ class Game extends Component {
     let currentView = this.state.showBoard ? <div><Board gameBoard={this.state.gameBoard} 
     onClick={i => this.handleClick(i)}/><Debug playerTurn={this.state.playerTurn} 
     gameWon={this.state.gameWon}/></div> : 
-    <div>
-        <button onClick={this.drawBoard.bind(this)}>X</button>
-        <button onClick={this.drawBoard.bind(this)}>O</button>
+      <div>
+        <h2>Would you like to be X or O?</h2>
+        <button onClick={this.selectX.bind(this)}>X</button>
+        <button onClick={this.selectO.bind(this)}>O</button>
       </div>;
 
       return (
