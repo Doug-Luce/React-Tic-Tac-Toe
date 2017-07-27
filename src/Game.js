@@ -76,7 +76,7 @@ class Game extends Component {
       playerMarker: 'X', 
       gameWon: false,
       aiMove: 0,
-      aiFirst: false,
+      aiFirst: this.coinFlip(),
       showBoard: false,
       showDialog: false
 
