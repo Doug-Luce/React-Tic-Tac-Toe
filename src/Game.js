@@ -76,7 +76,9 @@ class Game extends Component {
       playerMarker: 'X', 
       gameWon: false,
       aiMove: 0,
-      aiFirst: false
+      aiFirst: false,
+      showBoard: false,
+
     };
     // State doesn't update fast enough to be relied upon for the next state. I chose to handle this with a global variable, something like Redux would work too.
     // React state runs asynchronously
@@ -159,14 +161,28 @@ class Game extends Component {
         }
       }
     }
+  }
 
+  drawBoard() {
+    this.setState({showBoard: true});
+    console.log('Draw Board Executed');
   }
 
   render() {
-    return (
+    console.log(this.state.showBoard);
+    let currentView = this.state.showBoard ? <div><Board gameBoard={this.state.gameBoard} 
+    onClick={i => this.handleClick(i)}/><Debug playerTurn={this.state.playerTurn} 
+    gameWon={this.state.gameWon}/></div> : 
+    <div>
+        <button onClick={this.drawBoard.bind(this)}>X</button>
+        <button onClick={this.drawBoard.bind(this)}>O</button>
+      </div>;
+
+      return (
       <div>
-        <Board gameBoard={this.state.gameBoard} onClick={i => this.handleClick(i)}/>
-        <Debug playerTurn={this.state.playerTurn} gameWon={this.state.gameWon}/>
+
+        {currentView}
+
       </div>
     );
   }
