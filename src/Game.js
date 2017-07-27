@@ -78,6 +78,7 @@ class Game extends Component {
       aiMove: 0,
       aiFirst: false,
       showBoard: false,
+      showDialog: false
 
     };
     // State doesn't update fast enough to be relied upon for the next state. I chose to handle this with a global variable, something like Redux would work too.
@@ -169,13 +170,21 @@ class Game extends Component {
   }
 
   selectX() {
-    this.setState({showBoard: true, playerMarker: 'X'});
+    this.setState({playerMarker: 'X'});
     console.log('X selected');
+    this.coinFlip();
   }
 
   selectO() {
-    this.setState({showBoard: true, playerMarker: 'O'});
+    this.setState({playerMarker: 'O'});
     console.log('O Selected');
+    this.coinFlip();
+  }
+
+  coinFlip() {
+    let that = this;
+    this.setState({showDialog: true});
+    setTimeout(function(){ that.setState({showBoard: true, showDialog: false}); }, 3000);
   }
 
   render() {
@@ -188,12 +197,12 @@ class Game extends Component {
         <button onClick={this.selectX.bind(this)}>X</button>
         <button onClick={this.selectO.bind(this)}>O</button>
       </div>;
-
+      if(this.state.showDialog) {
+        currentView = <div>Choosing who goes first...</div>
+      }
       return (
       <div>
-
         {currentView}
-
       </div>
     );
   }
