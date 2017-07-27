@@ -78,13 +78,24 @@ class Game extends Component {
       aiMove: 0,
       aiFirst: false
     };
+    // State doesn't update fast enough to be relied upon for the next state. I chose to handle this with a global variable, something like Redux would work too.
+    // React state runs asynchronously
     this.gameWon = false;
+  }
+
+  componentWillMount() {
+    let notLoaded = true;
+    while(notLoaded) {
+      prompt('Do you want to go first?');
+      notLoaded = false;
+    }
   }
 
   componentDidMount() {
     if (this.state.aiFirst) {
       this.aiDecideMove();
       this.aiMove(this.state.aiMove);
+      console.log('AI MOVED FIRST');
     }
   }
 
