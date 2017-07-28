@@ -23,7 +23,7 @@ const Square = (props) => {
 const Debug = (props) => {
   return (
     <div>
-      <h3>this.state.playerTurn: {props.playerTurn.toString()}</h3>
+      <h3>this.playerTurn: {props.playerTurn.toString()}</h3>
       <h3>this.state.gameWon: {props.gameWon.toString()}</h3>
     </div>
     );
@@ -71,13 +71,11 @@ class Game extends Component {
   constructor() {
     super();
     this.state = {
-      gameBoard: Array(9).fill(null),
-      playerTurn: true,
-      //playerMarker: 'X', 
+      //gameBoard: Array(9).fill(null),
+      //playerTurn: true,
       gameWon: false,
-      aiMove: 0,
+      aiMoveChosen: 0,
       winner: null,
-      aiFirst: this.coinFlip(),
       showBoard: false,
       showDialog: false
     };
@@ -85,54 +83,63 @@ class Game extends Component {
     // React state runs asynchronously
     this.gameWon = false;
     this.playerMarker;
-  }
-
-  componentDidMount() {
-    if (this.state.aiFirst) {
+    this.aiMoveChosen;
+    this.aiFirst = this.coinFlip();
+    this.playerTurn = true;
+    this.gameBoard = Array(9).fill(null);
+    if(this.aiFirst) {
+      console.log('COMPUTER GOES FIRST');
       this.aiDecideMove();
-      this.aiMove(this.state.aiMove);
+      console.log(this.aiMoveChosen);
+      this.aiMove(this.aiMoveChosen);
+      console.log(this.gameBoard);
     }
   }
 
+  componentWillMount() {
+    this.forceUpdate();
+  }
+
+
   handleClick(i) {
     if (!this.gameWon) {
-      let gameBoardArr = this.state.gameBoard;
+      let gameBoardArr = this.gameBoard;
       // First turn logic for the player. This will check if the board is null, and input the selected nought or cross
       if (gameBoardArr[i] === null) {
-        if (this.state.playerTurn) {
+        if (this.playerTurn) {
            gameBoardArr[i] = this.playerMarker;
-         this.setState({playerTurn: false});
-         this.setState({gameBoard: gameBoardArr});
+         this.playerTurn = false;
+         this.gameBoard = gameBoardArr;
         }
       }
       this.checkWinner();
       this.aiDecideMove();
       if(!this.gameWon) {
-        this.aiMove(this.state.aiMove);
+        this.aiMove(this.aiMoveChosen);
       };
     }
+    this.forceUpdate()
   }
   aiDecideMove() {
     let possibleMoves = [];
-    let search = this.state.gameBoard.indexOf(null);
+    let search = this.gameBoard.indexOf(null);
     while (search !== -1) {
       possibleMoves.push(search);
-      search = this.state.gameBoard.indexOf(null, search + 1);
+      search = this.gameBoard.indexOf(null, search + 1);
     }
-    this.state.aiMove = possibleMoves.randomElement();
-    //this.setState({aiMove: possibleMoves.randomElement()});
+    this.aiMoveChosen = possibleMoves.randomElement();
   }
 
   aiMove(i) {
-    let gameBoardArr = this.state.gameBoard;
+    let gameBoardArr = this.gameBoard;
     if(this.playerMarker === 'X') {
       gameBoardArr[i] = 'O';
-    } else if(this.playerMarker === 'O') {
+    } 
+    if(this.playerMarker === 'O') {
       gameBoardArr[i] = 'X';
     }
-    
-    this.setState({playerTurn: true});
-    this.setState({gameBoard: gameBoardArr});
+    this.playerTurn = true;
+    this.gameBoard = gameBoardArr;
     this.checkWinner();
   }
 
@@ -142,14 +149,14 @@ class Game extends Component {
     let vRight = [];
     let leftCross = [];
     let rightCross = [];
-    let top = this.state.gameBoard.slice(0, 3);
-    let middle = this.state.gameBoard.slice(3, 6);
-    let bottom = this.state.gameBoard.slice(6, 9);
-    vLeft.push(this.state.gameBoard[0], this.state.gameBoard[3], this.state.gameBoard[6]);
-    vMiddle.push(this.state.gameBoard[1], this.state.gameBoard[4], this.state.gameBoard[7]);
-    vRight.push(this.state.gameBoard[2], this.state.gameBoard[5], this.state.gameBoard[8]);
-    leftCross.push(this.state.gameBoard[0], this.state.gameBoard[4], this.state.gameBoard[8]);
-    rightCross.push(this.state.gameBoard[2], this.state.gameBoard[4], this.state.gameBoard[6]);
+    let top = this.gameBoard.slice(0, 3);
+    let middle = this.gameBoard.slice(3, 6);
+    let bottom = this.gameBoard.slice(6, 9);
+    vLeft.push(this.gameBoard[0], this.gameBoard[3], this.gameBoard[6]);
+    vMiddle.push(this.gameBoard[1], this.gameBoard[4], this.gameBoard[7]);
+    vRight.push(this.gameBoard[2], this.gameBoard[5], this.gameBoard[8]);
+    leftCross.push(this.gameBoard[0], this.gameBoard[4], this.gameBoard[8]);
+    rightCross.push(this.gameBoard[2], this.gameBoard[4], this.gameBoard[6]);
     let winStates = [];
     winStates.push([vLeft, vMiddle, vRight, leftCross, rightCross, top, middle, bottom]);
     
@@ -209,8 +216,8 @@ class Game extends Component {
   }
 
   render() {
-    let currentView = this.state.showBoard ? <div><Board gameBoard={this.state.gameBoard} 
-    onClick={i => this.handleClick(i)}/><Debug playerTurn={this.state.playerTurn} 
+    let currentView = this.state.showBoard ? <div><Board gameBoard={this.gameBoard} 
+    onClick={i => this.handleClick(i)}/><Debug playerTurn={this.playerTurn} 
     gameWon={this.state.gameWon}/></div> : 
       <div>
         <h2>Would you like to be X or O?</h2>
@@ -218,7 +225,7 @@ class Game extends Component {
         <button onClick={this.selectO.bind(this)}>O</button>
       </div>;
       if(this.state.showDialog) {
-        if(!this.state.aiFirst) {
+        if(!this.aiFirst) {
           currentView = <div>Player goes first.</div>;
         } else {
           currentView = <div>Computer goes first.</div>;
