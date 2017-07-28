@@ -76,10 +76,10 @@ class Game extends Component {
       playerMarker: 'X', 
       gameWon: false,
       aiMove: 0,
+      winner: null,
       aiFirst: this.coinFlip(),
       showBoard: false,
       showDialog: false
-
     };
     // State doesn't update fast enough to be relied upon for the next state. I chose to handle this with a global variable, something like Redux would work too.
     // React state runs asynchronously
@@ -90,7 +90,6 @@ class Game extends Component {
     if (this.state.aiFirst) {
       this.aiDecideMove();
       this.aiMove(this.state.aiMove);
-      console.log('AI MOVED FIRST');
     }
   }
 
@@ -111,7 +110,6 @@ class Game extends Component {
         this.aiMove(this.state.aiMove);
       };
     }
-    console.log('handleClick has ran');
   }
   aiDecideMove() {
     let possibleMoves = [];
@@ -120,12 +118,11 @@ class Game extends Component {
       possibleMoves.push(search);
       search = this.state.gameBoard.indexOf(null, search + 1);
     }
-    console.log('Possible Moves are: ' + possibleMoves);
-    this.state.aiMove = possibleMoves.randomElement();
+    //this.state.aiMove = possibleMoves.randomElement();
+    this.setState({aiMove: possibleMoves.randomElement()});
   }
 
   aiMove(i) {
-    console.log('Computer chooses: ' + i);
     let gameBoardArr = this.state.gameBoard;
     if(this.state.playerMarker === 'X') {
       gameBoardArr[i] = 'O';
@@ -147,7 +144,7 @@ class Game extends Component {
     let top = this.state.gameBoard.slice(0, 3);
     let middle = this.state.gameBoard.slice(3, 6);
     let bottom = this.state.gameBoard.slice(6, 9);
-    vLeft.push(this.state.gameBoard[0], this.state.gameBoard[3], this.state.gameBoard[6]);   
+    vLeft.push(this.state.gameBoard[0], this.state.gameBoard[3], this.state.gameBoard[6]);
     vMiddle.push(this.state.gameBoard[1], this.state.gameBoard[4], this.state.gameBoard[7]);
     vRight.push(this.state.gameBoard[2], this.state.gameBoard[5], this.state.gameBoard[8]);
     leftCross.push(this.state.gameBoard[0], this.state.gameBoard[4], this.state.gameBoard[8]);
@@ -159,25 +156,44 @@ class Game extends Component {
     for (var i = 0; i < winStates.length; i++) {
       for (var y = 0; y < winStates[i].length; y++) {
         if(winStates[i][y].equals(['X','X','X'])) {
-          //this.setState({gameWon: true});
           this.gameWon = true;
+          this.setState({winner: 'X'});
         } else if (winStates[i][y].equals(['O','O','O'])){
-          //this.setState({gameWon: true});        }
           this.gameWon = true;
+          this.setState({winner: 'O'});
         }
       }
+    }
+    console.log('GameWon: ' + this.gameWon.toString());
+    if(this.gameWon) {
+      let that = this;
+      setTimeout(function(){
+       //alert(that.state.winner); 
+       console.log(that.state.winner);
+       console.log(that.state.playerMarker);
+
+       if(that.state.winner === 'X' && that.state.playerMarker === 'X') {
+        alert('Player Won');
+       } else if(that.state.winner === 'O' && that.state.playerMarker === 'X') {
+        alert('Computer Won');
+       } else if(that.state.winner === 'O' && that.state.playerMarker === 'O') {
+        alert('Player Won');
+       } else if(that.state.winner === 'X' && that.state.playerMarker === 'O' ) {
+        alert('Computer Won');
+      } else {
+        alert('Draw');
+      }
+     }, 3000);
     }
   }
 
   selectX() {
     this.setState({playerMarker: 'X'});
-    console.log('X selected');
     this.showDialog();
   }
 
   selectO() {
     this.setState({playerMarker: 'O'});
-    console.log('O Selected');
     this.showDialog();
   }
 
@@ -192,7 +208,6 @@ class Game extends Component {
   }
 
   render() {
-    console.log(this.state.showBoard);
     let currentView = this.state.showBoard ? <div><Board gameBoard={this.state.gameBoard} 
     onClick={i => this.handleClick(i)}/><Debug playerTurn={this.state.playerTurn} 
     gameWon={this.state.gameWon}/></div> : 
@@ -202,7 +217,7 @@ class Game extends Component {
         <button onClick={this.selectO.bind(this)}>O</button>
       </div>;
       if(this.state.showDialog) {
-        if(this.coinFlip()) {
+        if(!this.state.aiFirst) {
           currentView = <div>Player goes first.</div>;
         } else {
           currentView = <div>Computer goes first.</div>;
