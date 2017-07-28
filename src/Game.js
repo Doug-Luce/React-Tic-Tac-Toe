@@ -73,7 +73,7 @@ class Game extends Component {
     this.state = {
       gameBoard: Array(9).fill(null),
       playerTurn: true,
-      playerMarker: 'X', 
+      //playerMarker: 'X', 
       gameWon: false,
       aiMove: 0,
       winner: null,
@@ -84,6 +84,7 @@ class Game extends Component {
     // State doesn't update fast enough to be relied upon for the next state. I chose to handle this with a global variable, something like Redux would work too.
     // React state runs asynchronously
     this.gameWon = false;
+    this.playerMarker;
   }
 
   componentDidMount() {
@@ -99,7 +100,7 @@ class Game extends Component {
       // First turn logic for the player. This will check if the board is null, and input the selected nought or cross
       if (gameBoardArr[i] === null) {
         if (this.state.playerTurn) {
-           gameBoardArr[i] = this.state.playerMarker;
+           gameBoardArr[i] = this.playerMarker;
          this.setState({playerTurn: false});
          this.setState({gameBoard: gameBoardArr});
         }
@@ -118,15 +119,15 @@ class Game extends Component {
       possibleMoves.push(search);
       search = this.state.gameBoard.indexOf(null, search + 1);
     }
-    //this.state.aiMove = possibleMoves.randomElement();
-    this.setState({aiMove: possibleMoves.randomElement()});
+    this.state.aiMove = possibleMoves.randomElement();
+    //this.setState({aiMove: possibleMoves.randomElement()});
   }
 
   aiMove(i) {
     let gameBoardArr = this.state.gameBoard;
-    if(this.state.playerMarker === 'X') {
+    if(this.playerMarker === 'X') {
       gameBoardArr[i] = 'O';
-    } else if(this.state.playerMarker === 'O') {
+    } else if(this.playerMarker === 'O') {
       gameBoardArr[i] = 'X';
     }
     
@@ -170,15 +171,15 @@ class Game extends Component {
       setTimeout(function(){
        //alert(that.state.winner); 
        console.log(that.state.winner);
-       console.log(that.state.playerMarker);
+       console.log(that.playerMarker);
 
-       if(that.state.winner === 'X' && that.state.playerMarker === 'X') {
+       if(that.state.winner === 'X' && that.playerMarker === 'X') {
         alert('Player Won');
-       } else if(that.state.winner === 'O' && that.state.playerMarker === 'X') {
+       } else if(that.state.winner === 'O' && that.playerMarker === 'X') {
         alert('Computer Won');
-       } else if(that.state.winner === 'O' && that.state.playerMarker === 'O') {
+       } else if(that.state.winner === 'O' && that.playerMarker === 'O') {
         alert('Player Won');
-       } else if(that.state.winner === 'X' && that.state.playerMarker === 'O' ) {
+       } else if(that.state.winner === 'X' && that.playerMarker === 'O' ) {
         alert('Computer Won');
       } else {
         alert('Draw');
@@ -188,12 +189,12 @@ class Game extends Component {
   }
 
   selectX() {
-    this.setState({playerMarker: 'X'});
+    this.playerMarker = 'X';
     this.showDialog();
   }
 
   selectO() {
-    this.setState({playerMarker: 'O'});
+    this.playerMarker = 'O';
     this.showDialog();
   }
 
