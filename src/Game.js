@@ -164,6 +164,7 @@ class Game extends Component {
         }
       }
     }
+<<<<<<< HEAD
     console.log('GameWon: ' + this.gameWon.toString());
     if(this.gameWon) {
       let that = this;
@@ -185,6 +186,25 @@ class Game extends Component {
       }
      }, 3000);
     }
+=======
+    // setTimeout(function(){
+    //    //alert(that.state.winner); 
+    //    console.log(that.state.winner);
+    //    console.log(that.state.playerMarker);
+
+    //    if(that.state.winner === 'X' && that.state.playerMarker === 'X') {
+    //     alert('Player Won');
+    //    } else if(that.state.winner === 'O' && that.state.playerMarker === 'X') {
+    //     alert('Computer Won');
+    //    } else if(that.state.winner === 'O' && that.state.playerMarker === 'O') {
+    //     alert('Player Won');
+    //    } else if(that.state.winner === 'X' && that.state.playerMarker === 'O' ) {
+    //     alert('Computer Won');
+    //   } else {
+    //     alert('Draw');
+    //   }
+    //  }, 3000);
+>>>>>>> rework
   }
 
   selectX() {
